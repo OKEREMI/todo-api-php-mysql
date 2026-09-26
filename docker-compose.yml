@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: todos
+      DB_USER: todoapp
+      DB_PASSWORD: todopassword
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: todos
+      MYSQL_USER: todoapp
+      MYSQL_PASSWORD: todopassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./app/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
